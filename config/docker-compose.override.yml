@@ -1,0 +1,46 @@
+# IMPORTANT: The version must match the version of docker-compose.yml
+version: '2.3'
+
+services:
+
+  # -----------------------------------------------------------------------------------------------
+  # Disable services
+  # -----------------------------------------------------------------------------------------------
+  #pgsql:
+  #  image: hello-world
+  #redis:
+  #  image: hello-world
+  #memcd:
+  #  image: hello-world
+  #mongo:
+  #  image: hello-world
+
+
+  # -----------------------------------------------------------------------------------------------
+  # MailHog
+  # -----------------------------------------------------------------------------------------------
+  mailhog:
+    image: mailhog/mailhog:${MAILHOG_SERVER:-latest}
+    hostname: mailhog
+    ports:
+      - "${LOCAL_LISTEN_ADDR}${HOST_PORT_MAILHOG:-8025}:8025"
+    networks:
+      app_net:
+        ipv4_address: 172.16.238.201
+    depends_on:
+      - bind
+      - php
+      - httpd
+
+
+  # -----------------------------------------------------------------------------------------------
+  # LiveReload
+  # -----------------------------------------------------------------------------------------------
+  livereload:
+    image: franckdelage/livereload
+    ports:
+      - "${LOCAL_LISTEN_ADDR}35729:35729"
+    volumes:
+      - ${HOST_PATH_HTTPD_DATADIR}/my_project/htdocs/wp-content/themes/my_theme/dist:/usr/src/livereload-watch
+    depends_on:
+      - php
