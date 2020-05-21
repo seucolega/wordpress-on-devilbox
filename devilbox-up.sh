@@ -1,16 +1,19 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-DEVILBOX_FOLDER='devilbox'
-DEVILBOX_COMPOSE_FILE='docker-compose.override.yml'
-CONFIG_FOLDER='config'
-CONFIG_SCRIPT='devilbox-config.sh'
-DOCKER_SERVICES='httpd php mysql livereload mailhog'
-PROJECTS_FOLDER='projects'
-PROJECT_NAME='my_project'
-WP_THEME_NAME='my_theme'
+set -e -o pipefail
+
+source ./.env
 
 download_devilbox() {
-    git clone https://github.com/cytopia/devilbox
+    if [[ -d $DEVILBOX_FOLDER && ! -f "$DEVILBOX_FOLDER/docker-compose.yml" ]]
+    then
+        rmdir $DEVILBOX_FOLDER
+    fi
+    
+    if [ ! -d $DEVILBOX_FOLDER ]
+    then
+        git clone https://github.com/cytopia/devilbox
+    fi
 }
 
 configure_docker() {
@@ -20,7 +23,7 @@ configure_docker() {
         read -p "$msg" response
 		if [ "${string,}" = 'Y' ]
 		then
-            systemctl start docker
+            pkexec systemctl start docker
         fi
     fi
 }
@@ -40,10 +43,7 @@ configure_devilbox() {
 }
 
 main() {
-    if [ ! -d $DEVILBOX_FOLDER ]
-    then
-        download_devilbox
-    fi
+    download_devilbox
 
     if [ -d $DEVILBOX_FOLDER ]
     then

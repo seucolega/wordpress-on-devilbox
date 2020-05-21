@@ -1,7 +1,8 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-PROJECT_NAME='my_project'
-DEVILBOX_FOLDER='devilbox'
+set -e -o pipefail
+
+source ./.env
 
 configure_wordpress() {
     if [ ! -f "projects/$PROJECT_NAME/htdocs/wp-config-sample.php" ]
@@ -12,5 +13,4 @@ configure_wordpress() {
     fi
 }
 
-configure_wordpress    
-
+configure_wordpress

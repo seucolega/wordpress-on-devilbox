@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+export DEVILBOX_FOLDER='devilbox'
+export DEVILBOX_COMPOSE_FILE='docker-compose.override.yml'
+export CONFIG_FOLDER='config'
+export CONFIG_SCRIPT='devilbox-config.sh'
+export DOCKER_SERVICES='httpd php mysql livereload mailhog'
+export PROJECTS_FOLDER='projects'
+export PROJECT_NAME='projectname'
+export WP_THEME_NAME='projectname'
